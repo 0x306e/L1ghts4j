@@ -14,29 +14,23 @@ import twitter4j.TwitterStreamFactory;
 import twitter4j.UserStreamAdapter;
 import twitter4j.conf.Configuration;
 
-public class UserStream extends Thread
-{
+public class UserStream extends Thread {
 
-  public void ConnectUserStream() throws IllegalStateException, TwitterException, IOException
-  {
+  public void ConnectUserStream() throws IllegalStateException, TwitterException, IOException {
 
     Configuration conf = AccountManager.getConfig();
     Twitter twitter = new TwitterFactory(conf).getInstance();
     TwitterStream twitterStream = new TwitterStreamFactory(conf).getInstance();
     UpdateName updateName = new UpdateName();
 
-    twitterStream.addListener(new UserStreamAdapter()
-    {
-      public void onStatus(Status status)
-      {
-        try
-        {
+    twitterStream.addListener(new UserStreamAdapter() {
+      public void onStatus(Status status) {
+        try {
+          System.out.println("calling update name.");
           updateName.updateName(status);
-        } catch (TwitterException e)
-        {
+        } catch (TwitterException e) {
           e.printStackTrace();
-        } catch (IOException e)
-        {
+        } catch (IOException e) {
           e.printStackTrace();
         }
       }
@@ -47,19 +41,14 @@ public class UserStream extends Thread
   }
 
   @Override
-  public void run()
-  {
-    try
-    {
+  public void run() {
+    try {
       this.ConnectUserStream();
-    } catch (IllegalStateException e)
-    {
+    } catch (IllegalStateException e) {
       e.printStackTrace();
-    } catch (TwitterException e)
-    {
+    } catch (TwitterException e) {
       e.printStackTrace();
-    } catch (IOException e)
-    {
+    } catch (IOException e) {
       e.printStackTrace();
     }
   }

@@ -4,11 +4,9 @@ import java.io.IOException;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
 
-public class AccountManager
-{
-  
-  public static Configuration getConfig() throws IOException
-  {
+public class AccountManager {
+
+  public static Configuration getConfig() throws IOException {
     ConfigurationBuilder builder = new ConfigurationBuilder();
     SettingReader settingReader = new SettingReader();
 

@@ -10,8 +10,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
-public class Logger
-{
+public class Logger {
   private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
   private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss.SSS(xxxxx)");
 
@@ -20,30 +19,26 @@ public class Logger
 
   private File file = new File("log");
 
-  public Logger()
-  {
+  public Logger() {
     if (file.exists() == false)
       file.mkdirs();
   }
 
-  public void outputStartLog() throws Exception
-  {
+  public void outputStartLog() throws Exception {
     PrintWriter pw = new PrintWriter(
         new BufferedWriter(new FileWriter(("log\\" + sdf.format(date) + "-L1ghts4j.log"), true)));
     pw.println("[" + dtf.format(zdt) + "][INFO]  L1ghts4j has started.");
     pw.close();
   }
 
-  public void ouputUpdateNameLog(String message) throws IOException
-  {
+  public void ouputUpdateNameLog(String message) throws IOException {
     PrintWriter pw = new PrintWriter(
         new BufferedWriter(new FileWriter(("log\\" + sdf.format(date) + "-L1ghts4j.log"), true)));
     pw.println("[" + dtf.format(zdt) + "][INFO]  " + message);
     pw.close();
   }
 
-  public void ouputErrorLog(String message) throws IOException
-  {
+  public void ouputErrorLog(String message) throws IOException {
     PrintWriter pw = new PrintWriter(
         new BufferedWriter(new FileWriter(("log\\" + sdf.format(date) + "-L1ghts4j.log"), true)));
     pw.println("[" + dtf.format(zdt) + "][ERROR] " + message);
