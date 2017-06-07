@@ -1,8 +1,6 @@
 package l1ghts.logic;
 
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import l1ghts.account.AccountManager;
 import twitter4j.Status;
@@ -26,7 +24,6 @@ public class UserStream extends Thread {
     twitterStream.addListener(new UserStreamAdapter() {
       public void onStatus(Status status) {
         try {
-          System.out.println("calling update name.");
           updateName.updateName(status);
         } catch (TwitterException e) {
           e.printStackTrace();

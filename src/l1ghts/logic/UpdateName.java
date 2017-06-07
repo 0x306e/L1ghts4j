@@ -13,19 +13,22 @@ import twitter4j.User;
 
 public class UpdateName {
 
+  Twitter twitter;
+
   public UpdateName() {
+    twitter = TwitterFactory.getSingleton();
     System.out.println("UpdateName object has created.");
   }
 
   public void updateName(Status status) throws TwitterException, IOException {
-    Twitter twitter = TwitterFactory.getSingleton();
+    System.out.println("update name has called.");
+
     Logger logger = new Logger();
     Tweet tweet = new Tweet();
 
     Pattern updateNameFormat = Pattern.compile(String.format("@%s update_name (.{1,20})", twitter.getScreenName()));
     Matcher matchUpdateName = updateNameFormat.matcher(status.getText());
 
-    String newName = matchUpdateName.group(1);
     String screenName = status.getUser().getScreenName();
 
     User test = status.getUser();
@@ -34,20 +37,23 @@ public class UpdateName {
     System.out.println(test);
     System.out.println(screenName);
 
+    System.out.println("Checkin' matchs of format.");
     if (matchUpdateName.find()) {
-      System.out.println("trying update name.");
+      System.out.println("matched, trying update name.");
+      String newName = matchUpdateName.group(1);
 
       try {
 
         twitter.updateProfile(newName, null, null, null);
         tweet.ReplyTweet("名前を\"" + newName + "\"に変更しました(by @" + screenName + ")", status);
-        logger.ouputUpdateNameLog("Name has changed to \"" + newName + "\" by @" + screenName);
+        logger.ouputLog("Name has changed to \"" + newName + "\" by @" + screenName);
         System.out.println("Name has changed to \"" + newName + "\" by @" + screenName);
 
       } catch (TwitterException te) {
-        System.out.println(te);
         te.printStackTrace();
       }
+    } else {
+        System.out.println("not matched.");
     }
 
   }

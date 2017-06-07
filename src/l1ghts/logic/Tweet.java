@@ -8,7 +8,7 @@ import twitter4j.TwitterFactory;
 
 /**
  * ツイートに関する処理のクラス
- * @author 3sodn
+ * @author 0x306e
  */
 public class Tweet {
   
