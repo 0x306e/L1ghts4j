@@ -1,4 +1,4 @@
-package l1ghts.util;
+package debug;
 
 import java.io.IOException;
 
