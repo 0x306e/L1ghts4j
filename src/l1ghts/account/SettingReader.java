@@ -1,6 +1,7 @@
 package l1ghts.account;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.regex.Matcher;
@@ -12,29 +13,43 @@ import java.util.regex.Pattern;
  */
 public class SettingReader {
   
-  private String DEBUG_VALUE = "debug";
-  private String CONSUMER_KEY = "oauth.consumerKey";
-  private String CONSUMER_KEY_SECRET = "oauth.consumerSecret";
-  private String ACCESS_TOKEN = "oauth.accessToken";
-  private String ACCESS_TOKEN_SECRET = "oauth.accessTokenSecret";
+  private final static String DEBUG_VALUE = "debug";
+  private final static String CONSUMER_KEY = "oauth.consumerKey";
+  private final static String CONSUMER_KEY_SECRET = "oauth.consumerSecret";
+  private final static String ACCESS_TOKEN = "oauth.accessToken";
+  private final static String ACCESS_TOKEN_SECRET = "oauth.accessTokenSecret";
+  
+  private static BufferedReader br;
 
-  private String Reader(String targetName) throws IOException {
+  private static String Reader(String targetName) {
     String read = "", key = "";
-    BufferedReader br = new BufferedReader(new FileReader("twitter4j.properties"));
+    try {
+      br = new BufferedReader(new FileReader("twitter4j.properties"));
+    } catch (FileNotFoundException e) {
+      System.out.println("twitter4j.properties does not found.");
+    }
     Pattern formatTarget = Pattern.compile(String.format("%s=(.{1,50})", targetName));
     Matcher matchTarget;
     
-    do {
-      read = br.readLine();
-      System.out.println("got str is " + read);
-      matchTarget = formatTarget.matcher(read);
+    int cnt = 0;
+    try {
+      do {
+        read = br.readLine();
+        matchTarget = formatTarget.matcher(read);
 
-      if (matchTarget.find()) {
-        key = matchTarget.group(1);
+        if (matchTarget.find()) {
+          key = matchTarget.group(1);
+        }
+        cnt++;
+      } while (key == "" && cnt < 5);
+
+      br.close();
+    } catch (IOException e) {
+      if (key == "") {
+        System.out.println("twitter4j.propertiesの読み込み中にエラーが発生しました.");
+        System.out.println("API keyの情報が間違っている可能性があります.");
       }
-    } while (key == "");
-
-    br.close();
+    }
     
     System.out.println(key);
     return key;
@@ -45,9 +60,9 @@ public class SettingReader {
    * @return Debugのtrue/falseを返すメソッド
    * @throws IOException
    */
-  public boolean getDebugValue() throws IOException
+  public static boolean getDebugValue() throws IOException
   {
-    boolean value = "true".equals(this.Reader(DEBUG_VALUE));
+    boolean value = "true".equals(Reader(DEBUG_VALUE));
     return value;
   }
   
@@ -56,8 +71,7 @@ public class SettingReader {
    * @throws IOException
    */
   public String getAccessToken() throws IOException {
-    String at = this.Reader(ACCESS_TOKEN);
-    return at;
+    return Reader(ACCESS_TOKEN);
   }
 
   /**
@@ -65,8 +79,7 @@ public class SettingReader {
    * @throws IOException
    */
   public String getAccessTokenSecret() throws IOException {
-    String as = this.Reader(ACCESS_TOKEN_SECRET);
-    return as;
+    return Reader(ACCESS_TOKEN_SECRET);
   }
 
   /**
@@ -74,8 +87,7 @@ public class SettingReader {
    * @throws IOException
    */
   public String getConsumerKey() throws IOException {
-    String ck = this.Reader(CONSUMER_KEY);
-    return ck;
+    return Reader(CONSUMER_KEY);
   }
 
   /**
@@ -83,8 +95,7 @@ public class SettingReader {
    * @throws IOException
    */
   public String getConsumerSecret() throws IOException {
-    String cs = this.Reader(CONSUMER_KEY_SECRET);
-    return cs;
+    return Reader(CONSUMER_KEY_SECRET);
   }
 
 }
