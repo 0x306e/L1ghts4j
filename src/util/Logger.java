@@ -21,8 +21,9 @@ public class Logger {
   private Date date = new Date();
   private ZonedDateTime zdt = ZonedDateTime.now();
   private File file = new File("log");
-
-  private String OUTPUT_DIRECTORY = "log\\" + sdf.format(date) + "-L1ghts4j.log";
+  private String fs = System.getProperty("file.separator");
+  
+  private String OUTPUT_DIRECTORY = "log" + fs + sdf.format(date) + "-L1ghts4j.log";
   private String LOG_HEADER = "[" + dtf.format(zdt) + "]";
 
   public Logger() {
