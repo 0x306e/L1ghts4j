@@ -30,8 +30,8 @@ public class Loader {
    * @throws IOException
    */
   public void UserStreamReceicever(Status status) throws TwitterException, IOException {
-    un.updateName(status);
-    ul.updateLocation(status);
+    un.updateNameCall(status);
+    ul.updateLocationCall(status);
   }
 
 }

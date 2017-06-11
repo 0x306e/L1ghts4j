@@ -29,7 +29,7 @@ public class UpdateName {
     logger = new Logger();
   }
 
-  public void updateName(Status status) throws TwitterException, IOException {
+  public void updateNameCall(Status status) throws TwitterException, IOException {
 
     Pattern p = Pattern.compile(String.format("@%s update_name (.{1,21})", twitter.getScreenName()));
     Matcher m = p.matcher(status.getText());
@@ -44,33 +44,39 @@ public class UpdateName {
     SettingReader settingReader = new SettingReader();
 
     if (settingReader.getUpdateNameAccessLevel() == 2) {
-      try {
-        twitter.updateProfile(newName, null, null, null);
-        tweet.ReplyTweet("名前を\"" + newName + "\"に変更しました(by @" + screenName + ")" + TIME_FOOTER, status);
-        logger.ouputLog("Name has changed to \"" + newName + "\" by @" + screenName);
-        System.out.println("Name has changed to \"" + newName + "\" by @" + screenName);
-      } catch (TwitterException e) {
-        if (newName.length() > 20) {
-          tweet.ReplyTweet("ユーザーネームは20文字以内で指定して下さい" + TIME_FOOTER, status);
-          logger
-              .ouputErrorLog("Name has couldn't changed " + newName + " (OutOfBoundsException)(by " + screenName + ")");
-        } else if (newName.contains("Twitter")) {
-          tweet.ReplyTweet("\"Twitter\"を含む名前にはできません。" + TIME_FOOTER, status);
-          logger
-              .ouputErrorLog("Name has counldn't changed to " + newName + " (TwitterException)(by " + screenName + ")");
-        } else {
-          tweet.ReplyTweet("不明なエラーが発生しました" + TIME_FOOTER, status);
-          logger.ouputErrorLog("Name has couldn't changed to " + newName + " (Unknown error)(by " + screenName + ")");
-        }
-        e.printStackTrace();
-      }
-
+      this.updateNameExec(status, newName, screenName);
     } else if (settingReader.getUpdateNameAccessLevel() == 1) {
-      tweet.ReplyTweet("Permission Dnied" + TIME_FOOTER, status);
-      logger.ouputErrorLog("Name has couldn't changed to " + newName + " (Permission denied)(by " + screenName + ")");
+      if ((twitter.getScreenName() == status.getUser().getScreenName())) {
+        this.updateNameExec(status, newName, screenName);
+      } else {
+        tweet.ReplyTweet("Permission Dnied" + TIME_FOOTER, status);
+        logger.ouputErrorLog("Name has couldn't changed to " + newName + " (Permission denied)(by " + screenName + ")");
+      }
     } else if (settingReader.getUpdateNameAccessLevel() == 0) {
       tweet.ReplyTweet("update_namer is now tuned off." + TIME_FOOTER, status);
       logger.ouputErrorLog("Name has couldn't changed to " + newName + " (Tuned off)(by " + screenName + ")");
+    }
+
+  }
+
+  private void updateNameExec(Status status, String newName, String screenName) throws TwitterException {
+    try {
+      twitter.updateProfile(newName, null, null, null);
+      tweet.ReplyTweet("名前を\"" + newName + "\"に変更しました(by @" + screenName + ")" + TIME_FOOTER, status);
+      logger.ouputLog("Name has changed to \"" + newName + "\" by @" + screenName);
+      System.out.println("Name has changed to \"" + newName + "\" by @" + screenName);
+    } catch (TwitterException e) {
+      if (newName.length() > 20) {
+        tweet.ReplyTweet("ユーザーネームは20文字以内で指定して下さい" + TIME_FOOTER, status);
+        logger.ouputErrorLog("Name has couldn't changed " + newName + " (OutOfBoundsException)(by " + screenName + ")");
+      } else if (newName.contains("Twitter")) {
+        tweet.ReplyTweet("\"Twitter\"を含む名前にはできません。" + TIME_FOOTER, status);
+        logger.ouputErrorLog("Name has counldn't changed to " + newName + " (TwitterException)(by " + screenName + ")");
+      } else {
+        tweet.ReplyTweet("不明なエラーが発生しました" + TIME_FOOTER, status);
+        logger.ouputErrorLog("Name has couldn't changed to " + newName + " (Unknown error)(by " + screenName + ")");
+      }
+      e.printStackTrace();
     }
 
   }

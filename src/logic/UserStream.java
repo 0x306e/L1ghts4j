@@ -24,7 +24,7 @@ public class UserStream extends Thread {
     twitterStream.addListener(new UserStreamAdapter() {
       public void onStatus(Status status) {
         try {
-          updateName.updateName(status);
+          updateName.updateNameCall(status);
         } catch (TwitterException e) {
           e.printStackTrace();
         } catch (IOException e) {
