@@ -20,8 +20,6 @@ public class ReadSettingTester {
 
     Twitter twitter = new TwitterFactory(AccountManager.getConfig()).getInstance();
 
-    System.out.println(twitter.getScreenName());
-    System.out.println();
 
   }
 

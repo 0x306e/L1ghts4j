@@ -11,11 +11,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 /**
- * @author 3sodn
- * ログ出力をするクラス
+ * @author 3sodn ログ出力をするクラス
  */
 public class Logger {
-	
+
   private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
   private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss.SSS(xxxxx)");
 
@@ -32,38 +31,56 @@ public class Logger {
   }
 
   /**
- * 開始時のログを出力するメソッド 
- * @throws Exception
- */
-public void outputStartLog() throws Exception {
-    PrintWriter pw = new PrintWriter(
-        new BufferedWriter(new FileWriter((OUTPUT_DIRECTORY), true)));
-    pw.println(LOG_HEADER + "[INFO]  L1ghts4j has started.");
-    pw.close();
+   * 開始時のログを出力するメソッド
+   * 
+   * @throws Exception
+   */
+  public void outputStartLog() {
+    try {
+      PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter((OUTPUT_DIRECTORY), true)));
+      pw.println(LOG_HEADER + "[INFO]  L1ghts4j has started.");
+      pw.close();
+    } catch (IOException e) {
+      System.out.println("[ERROR] IOException has occurred in start log outputment.");
+      e.printStackTrace();
+    }
   }
 
   /**
- * 標準的なログを出力するメソッド
- * @param message 出力するログメッセージ
- * @throws IOException
- */
-public void ouputLog(String message) throws IOException {
-    PrintWriter pw = new PrintWriter(
-        new BufferedWriter(new FileWriter((OUTPUT_DIRECTORY), true)));
-    pw.println(LOG_HEADER + "[INFO]  " + message);
-    pw.close();
+   * 標準的なログを出力するメソッド
+   * 
+   * @param message
+   *          出力するログメッセージ
+   * @throws IOException
+   */
+  public void ouputLog(String message) {
+    PrintWriter pw;
+    try {
+      pw = new PrintWriter(new BufferedWriter(new FileWriter((OUTPUT_DIRECTORY), true)));
+      pw.println(LOG_HEADER + "[INFO]  " + message);
+      pw.close();
+    } catch (IOException e) {
+      System.out.println("[ERROR] IOException has occurred in Log outputment.");
+      e.printStackTrace();
+    }
   }
 
   /**
- * エラーログを出力するメソッド
- * @param message 出力するログメッセージ
- * @throws IOException
- */
-public void ouputErrorLog(String message) throws IOException {
-    PrintWriter pw = new PrintWriter(
-        new BufferedWriter(new FileWriter((OUTPUT_DIRECTORY), true)));
-    pw.println(LOG_HEADER + "[ERROR] " + message);
-    pw.close();
+   * エラーログを出力するメソッド
+   * 
+   * @param message
+   *          出力するログメッセージ
+   * @throws IOException
+   */
+  public void ouputErrorLog(String message) {
+    try {
+      PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter((OUTPUT_DIRECTORY), true)));
+      pw.println(LOG_HEADER + "[ERROR] " + message);
+      pw.close();
+    } catch (Exception e) {
+      System.out.println("[ERROR] IOException has occurred in Error log outputment.");
+      e.printStackTrace();
+    }
   }
 
 }
