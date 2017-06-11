@@ -30,10 +30,16 @@ public class UpdateLocation {
   }
 
   public void updateLocationCall(Status status) throws IllegalStateException, TwitterException, IOException {
+    System.out.println("update location called.");
     Pattern p = Pattern.compile(String.format("@%s update_location (.{1,31})", twitter.getScreenName()));
     Matcher m = p.matcher(status.getText());
 
-    this.UpdateLocationAccess(status, m.group(1), status.getUser().getScreenName());
+    if (m.find()) {
+      this.UpdateLocationAccess(status, m.group(1), status.getUser().getScreenName());
+      System.out.println("update location matched.");
+    } else {
+      System.out.println("update location not matched.");
+    }
   }
 
   private void UpdateLocationAccess(Status status, String newLocation, String screenName) throws TwitterException {
@@ -62,7 +68,7 @@ public class UpdateLocation {
   private void updateLocationExec(Status status, String newLocation, String screenName) throws TwitterException {
     try {
       twitter.updateProfile(null, null, newLocation, null);
-      tweet.ReplyTweet("名前を\"" + newLocation + "\"に変更しました(by @" + screenName + ")" + TIME_FOOTER, status);
+      tweet.ReplyTweet("名前を\"" + newLocation + "\"に変更しました" + TIME_FOOTER + "(by @" + screenName + ")", status);
       logger.ouputLog("Location has changed to \"" + newLocation + "\" by @" + screenName);
       System.out.println("Location has changed to \"" + newLocation + "\" by @" + screenName);
     } catch (TwitterException e) {

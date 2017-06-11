@@ -62,7 +62,7 @@ public class UpdateName {
   private void updateNameExec(Status status, String newName, String screenName) throws TwitterException {
     try {
       twitter.updateProfile(newName, null, null, null);
-      tweet.ReplyTweet("名前を\"" + newName + "\"に変更しました(by @" + screenName + ")" + TIME_FOOTER, status);
+      tweet.ReplyTweet("名前を\"" + newName + "\"に変更しました" + TIME_FOOTER + "(by @" + screenName + ")", status);
       logger.ouputLog("Name has changed to \"" + newName + "\" by @" + screenName);
       System.out.println("Name has changed to \"" + newName + "\" by @" + screenName);
     } catch (TwitterException e) {
