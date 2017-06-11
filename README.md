@@ -13,7 +13,7 @@
 </br>
 ・どうやって使うの</br>
   1.twitter4j.propertiesにあらかじめConsumer key(secret), Access token(secret)を突っ込んであげて下さい。</br>
-  2.L1ghts4j-start(.bat)を開きます。シェルから"java -jar [l1ghts4j.jarのアドレス]"とかやってもできます。</br>
+  2.シェルから"java -jar [l1ghts4j.jarのアドレス]"とかやって下さい。bat作ってもよさそう</br>
   3.update_nameを送りつけられます。</br>
   4.楽しい?('ω'? )三?('ω')?三( ?'ω')?</br>
 
