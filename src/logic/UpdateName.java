@@ -16,7 +16,6 @@ public class UpdateName {
 
   public UpdateName() {
     twitter = TwitterFactory.getSingleton();
-    System.out.println("UpdateName object has created.");
   }
 
   public void updateName(Status status) throws TwitterException, IOException {

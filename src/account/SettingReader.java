@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
  */
 public class SettingReader {
 
+  private static final String TWITTER4J_PROPERTIES = "twitter4j.properties";
   private final static String DEBUG_VALUE = "debug";
   private final static String CONSUMER_KEY = "oauth.consumerKey";
   private final static String CONSUMER_KEY_SECRET = "oauth.consumerSecret";
@@ -20,10 +21,15 @@ public class SettingReader {
 
   private static BufferedReader br;
 
+  /**
+   * twitter4j.propertiesから指定されたデータを読み出すメソッド
+   * @param targetName 読み出すデータの名前
+   * @return 読み出したデータ
+   */
   private static String Reader(String targetName) {
     String read = "", key = "";
     try {
-      br = new BufferedReader(new FileReader("twitter4j.properties"));
+      br = new BufferedReader(new FileReader(TWITTER4J_PROPERTIES));
     } catch (FileNotFoundException e) {
       System.out.println("twitter4j.properties does not found.");
     }
