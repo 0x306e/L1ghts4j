@@ -5,6 +5,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
+/**
+ * @author 0x306e
+ * l1ghts4j.propertiesから情報を読み出すメソッドのクラス
+ */
 public class SettingReader {
 
   private final static String L1GHTS4J_PROPS = "l1ghts4j.properties";
@@ -30,16 +34,28 @@ public class SettingReader {
     return value;
   }
 
-  public String getUpdateNameAccessLevel() {
-    return Reader(L1GHTS4J_PROPS, UPDATE_NAME_ACCESS_LEVEL);
+  /**
+   * UpdateNameのアクセスレベルを返すクラス
+   * @return int 0~2
+   */
+  public int getUpdateNameAccessLevel() {
+    return Integer.parseInt(Reader(L1GHTS4J_PROPS, UPDATE_NAME_ACCESS_LEVEL));
   }
   
-  public String getUpdateLocationAccessLevel() {
-    return Reader(L1GHTS4J_PROPS, UPDATE_LOCATION_ACCESS_LEVEL);
+  /**
+   * UpdateLocationのアクセスレベルを返すクラス
+   * @return int 0~2
+   */
+  public int getUpdateLocationAccessLevel() {
+    return Integer.parseInt(Reader(L1GHTS4J_PROPS, UPDATE_LOCATION_ACCESS_LEVEL));
   }
   
-  public String getUpdateIconAccessLevel() {
-    return Reader(L1GHTS4J_PROPS, UPDATE_ICON_ACCESS_LEVEL);
+  /**
+   * UpdateIconのアクセスレベルを返すクラス
+   * @return int 0~2
+   */
+  public int getUpdateIconAccessLevel() {
+    return Integer.parseInt(Reader(L1GHTS4J_PROPS, UPDATE_ICON_ACCESS_LEVEL));
   }
 
 }
