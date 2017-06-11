@@ -3,6 +3,7 @@ package util;
 import java.io.IOException;
 
 import logic.UpdateIcon;
+import logic.UpdateLocation;
 import logic.UpdateName;
 import twitter4j.Status;
 import twitter4j.TwitterException;
@@ -13,10 +14,12 @@ import twitter4j.TwitterException;
 public class Loader {
 
   UpdateName un;
+  UpdateLocation ul;
   UpdateIcon ui;
 
   public Loader() {
     un = new UpdateName();
+    ul = new UpdateLocation();
   }
 
   /**
@@ -28,6 +31,7 @@ public class Loader {
    */
   public void UserStreamReceicever(Status status) throws TwitterException, IOException {
     un.updateName(status);
+    ul.updateLocation(status);
   }
 
 }
