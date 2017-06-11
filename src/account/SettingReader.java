@@ -10,37 +10,28 @@ import java.util.Properties;
  */
 public class SettingReader {
 
-<<<<<<< HEAD
   private static final String TWITTER4J_PROPERTIES = "twitter4j.properties";
-=======
-  private final static String TWITTER4J_PROPS = "twitter4j.properties";
 
->>>>>>> use_props
   private final static String DEBUG_VALUE = "debug";
   private final static String CONSUMER_KEY = "oauth.consumerKey";
   private final static String CONSUMER_KEY_SECRET = "oauth.consumerSecret";
   private final static String ACCESS_TOKEN = "oauth.accessToken";
   private final static String ACCESS_TOKEN_SECRET = "oauth.accessTokenSecret";
 
-  private static String Reader(String FileName, String targetName) {
-    Properties prop = new Properties();
-
-<<<<<<< HEAD
   /**
    * twitter4j.propertiesから指定されたデータを読み出すメソッド
-   * @param targetName 読み出すデータの名前
+   * 
+   * @param targetName
+   *          読み出すデータの名前
    * @return 読み出したデータ
    */
-  private static String Reader(String targetName) {
-    String read = "", key = "";
+  private static String Reader(String fileName,String targetName) {
+    Properties prop = new Properties();
+
     try {
-      br = new BufferedReader(new FileReader(TWITTER4J_PROPERTIES));
-=======
-    try {
-      prop.load(new FileInputStream(FileName));
->>>>>>> use_props
+      prop.load(new FileInputStream(fileName));
     } catch (FileNotFoundException e) {
-      System.out.println("[ERROR] " + FileName + " does not found.");
+      System.out.println("[ERROR] " + fileName + " does not found.");
       e.printStackTrace();
     } catch (IOException e) {
       System.out.println("[ERROR] IOException has occurred.");
@@ -56,7 +47,7 @@ public class SettingReader {
    * @throws IOException
    */
   public static boolean getDebugValue() throws IOException {
-    boolean value = "true".equals(Reader(TWITTER4J_PROPS, DEBUG_VALUE));
+    boolean value = "true".equals(Reader(TWITTER4J_PROPERTIES, DEBUG_VALUE));
     return value;
   }
 
@@ -65,7 +56,7 @@ public class SettingReader {
    * @throws IOException
    */
   public static String getAccessToken() throws IOException {
-    return Reader(TWITTER4J_PROPS, ACCESS_TOKEN);
+    return Reader(TWITTER4J_PROPERTIES, ACCESS_TOKEN);
   }
 
   /**
@@ -73,7 +64,7 @@ public class SettingReader {
    * @throws IOException
    */
   public static String getAccessTokenSecret() throws IOException {
-    return Reader(TWITTER4J_PROPS, ACCESS_TOKEN_SECRET);
+    return Reader(TWITTER4J_PROPERTIES, ACCESS_TOKEN_SECRET);
   }
 
   /**
@@ -81,7 +72,7 @@ public class SettingReader {
    * @throws IOException
    */
   public static String getConsumerKey() throws IOException {
-    return Reader(TWITTER4J_PROPS, CONSUMER_KEY);
+    return Reader(TWITTER4J_PROPERTIES, CONSUMER_KEY);
   }
 
   /**
@@ -89,7 +80,7 @@ public class SettingReader {
    * @throws IOException
    */
   public static String getConsumerSecret() throws IOException {
-    return Reader(TWITTER4J_PROPS, CONSUMER_KEY_SECRET);
+    return Reader(TWITTER4J_PROPERTIES, CONSUMER_KEY_SECRET);
   }
 
 }

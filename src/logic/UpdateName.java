@@ -25,15 +25,11 @@ public class UpdateName {
 
   public UpdateName() {
     twitter = TwitterFactory.getSingleton();
-<<<<<<< HEAD
-=======
     tweet = new Tweet();
     logger = new Logger();
->>>>>>> use_props
   }
 
   public void updateName(Status status) throws TwitterException, IOException {
-    System.out.println("update name has called.");
 
     Pattern p = Pattern.compile(String.format("@%s update_name (.{1,21})", twitter.getScreenName()));
     Matcher m = p.matcher(status.getText());
