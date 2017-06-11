@@ -9,6 +9,7 @@ import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import util.Logger;
+import util.SettingReader.*;
 
 public class UpdateName {
 
@@ -25,13 +26,13 @@ public class UpdateName {
     Logger logger = new Logger();
     Tweet tweet = new Tweet();
 
-    Pattern updateNameFormat = Pattern.compile(String.format("@%s update_name (.{1,20})", twitter.getScreenName()));
-    Matcher matchUpdateName = updateNameFormat.matcher(status.getText());
+    Pattern p = Pattern.compile(String.format("@%s update_name (.{1,20})", twitter.getScreenName()));
+    Matcher m = p.matcher(status.getText());
 
     String screenName = status.getUser().getScreenName();
 
-    if (matchUpdateName.find()) {
-      String newName = matchUpdateName.group(1);
+    if (m.find()) {
+      String newName = m.group(1);
 
       try {
         twitter.updateProfile(newName, null, null, null);
@@ -42,7 +43,15 @@ public class UpdateName {
       } catch (TwitterException te) {
         te.printStackTrace();
       }
+
     }
+
   }
+  
+//  private void UpdateNameAccess() {
+//    if () {
+//      
+//    }
+//  }
 
 }
