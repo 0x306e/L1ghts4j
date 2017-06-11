@@ -1,9 +1,9 @@
-package l1ghts.util;
+package util;
 
 import java.io.IOException;
 
-import l1ghts.logic.UpdateIcon;
-import l1ghts.logic.UpdateName;
+import logic.UpdateIcon;
+import logic.UpdateName;
 import twitter4j.Status;
 import twitter4j.TwitterException;
 

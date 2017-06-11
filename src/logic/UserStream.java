@@ -1,8 +1,8 @@
-package l1ghts.logic;
+package logic;
 
 import java.io.IOException;
 
-import l1ghts.account.AccountManager;
+import account.AccountManager;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;

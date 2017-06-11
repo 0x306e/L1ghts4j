@@ -2,8 +2,8 @@ package debug;
 
 import java.io.IOException;
 
-import l1ghts.account.AccountManager;
-import l1ghts.account.SettingReader;
+import account.AccountManager;
+import account.SettingReader;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;

@@ -1,4 +1,4 @@
-package l1ghts.logic;
+package logic;
 
 public class UpdateIcon {
   // yotei ha mitei

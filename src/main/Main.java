@@ -1,7 +1,7 @@
-package l1ghts.main;
+package main;
 
-import l1ghts.logic.UserStream;
-import l1ghts.util.Logger;
+import logic.UserStream;
+import util.Logger;
 
 public class Main {
 

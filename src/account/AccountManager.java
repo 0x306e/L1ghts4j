@@ -1,4 +1,4 @@
-package l1ghts.account;
+package account;
 
 import java.io.IOException;
 import twitter4j.conf.Configuration;

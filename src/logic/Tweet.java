@@ -1,4 +1,4 @@
-package l1ghts.logic;
+package logic;
 
 import twitter4j.Status;
 import twitter4j.StatusUpdate;

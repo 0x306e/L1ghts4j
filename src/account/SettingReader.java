@@ -1,4 +1,4 @@
-package l1ghts.account;
+package account;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -8,17 +8,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @author 3sodn
- * twitter4j.propertiesから情報を読み取るクラス
+ * @author 3sodn twitter4j.propertiesから情報を読み取るクラス
  */
 public class SettingReader {
-  
+
   private final static String DEBUG_VALUE = "debug";
   private final static String CONSUMER_KEY = "oauth.consumerKey";
   private final static String CONSUMER_KEY_SECRET = "oauth.consumerSecret";
   private final static String ACCESS_TOKEN = "oauth.accessToken";
   private final static String ACCESS_TOKEN_SECRET = "oauth.accessTokenSecret";
-  
+
   private static BufferedReader br;
 
   private static String Reader(String targetName) {
@@ -30,7 +29,7 @@ public class SettingReader {
     }
     Pattern formatTarget = Pattern.compile(String.format("%s=(.{1,50})", targetName));
     Matcher matchTarget;
-    
+
     int cnt = 0;
     try {
       do {
@@ -50,7 +49,7 @@ public class SettingReader {
         System.out.println("API keyの情報が間違っている可能性があります.");
       }
     }
-    
+
     System.out.println(key);
     return key;
 
@@ -60,14 +59,13 @@ public class SettingReader {
    * @return Debugのtrue/falseを返すメソッド
    * @throws IOException
    */
-  public static boolean getDebugValue() throws IOException
-  {
+  public static boolean getDebugValue() throws IOException {
     boolean value = "true".equals(Reader(DEBUG_VALUE));
     return value;
   }
-  
+
   /**
-   * @return　Access Tokenのデータを返すメソッド
+   * @return Access Tokenのデータを返すメソッド
    * @throws IOException
    */
   public String getAccessToken() throws IOException {

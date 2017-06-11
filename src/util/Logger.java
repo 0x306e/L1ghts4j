@@ -1,4 +1,4 @@
-package l1ghts.util;
+package util;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -27,7 +27,7 @@ public class Logger {
   private String LOG_HEADER = "[" + dtf.format(zdt) + "]";
 
   public Logger() {
-    if (file.exists() == false)
+    if (!file.exists())
       file.mkdirs();
   }
 
