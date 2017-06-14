@@ -20,8 +20,7 @@ public class UpdateName {
   private Logger logger;
 
   private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("(yyyy-MM-dd_HH:mm:ss.SSS)");
-  private ZonedDateTime zdt = ZonedDateTime.now();
-  private String TIME_FOOTER = dtf.format(zdt);
+  private String TIME_FOOTER;
 
   public UpdateName() {
     twitter = TwitterFactory.getSingleton();
@@ -30,7 +29,7 @@ public class UpdateName {
   }
 
   public void updateNameCall(Status status) throws TwitterException, IOException {
-
+    dtf.format(ZonedDateTime.now());
     Pattern p = Pattern.compile(String.format("@%s update_name (.{1,21})", twitter.getScreenName()));
     Matcher m = p.matcher(status.getText());
 
