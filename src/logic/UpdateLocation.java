@@ -15,13 +15,12 @@ import util.SettingReader;
 import logic.Tweet;
 
 public class UpdateLocation {
-  Twitter twitter;
-  Tweet tweet;
-  Logger logger;
+  private Twitter twitter;
+  private Tweet tweet;
+  private Logger logger;
 
-  private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("(yyyy-MM-dd_HH:mm:ss.SSS)");
-  private ZonedDateTime zdt = ZonedDateTime.now();
-  private String TIME_FOOTER = dtf.format(zdt);
+  private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("(yyyy-MM-dd_HH:mm:ss.SSS)");
+  private static String TIME_FOOTER;
 
   public UpdateLocation() {
     twitter = TwitterFactory.getSingleton();
@@ -30,6 +29,7 @@ public class UpdateLocation {
   }
 
   public void updateLocationCall(Status status) throws IllegalStateException, TwitterException, IOException {
+    TIME_FOOTER = dtf.format(ZonedDateTime.now());
     System.out.println("update location called.");
     Pattern p = Pattern.compile(String.format("@%s update_location (.{1,31})", twitter.getScreenName()));
     Matcher m = p.matcher(status.getText());
@@ -47,7 +47,7 @@ public class UpdateLocation {
 
     if (settingReader.getUpdateNameAccessLevel() == 2) {
       this.updateLocationExec(status, newLocation, screenName);
-      
+
     } else if (settingReader.getUpdateNameAccessLevel() == 1) {
       
       if ((twitter.getScreenName() == status.getUser().getScreenName())) {
