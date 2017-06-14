@@ -15,20 +15,24 @@ import java.util.Date;
  */
 public class Logger {
 
-  private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
-  private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss.SSS(xxxxx)");
+  private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+  private static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss.SSS(xxxxx)");
 
-  private Date date = new Date();
-  private ZonedDateTime zdt = ZonedDateTime.now();
-  private File file = new File("log");
-  private String fs = System.getProperty("file.separator");
-  
-  private String OUTPUT_DIRECTORY = "log" + fs + sdf.format(date) + "-L1ghts4j.log";
-  private String LOG_HEADER = "[" + dtf.format(zdt) + "]";
+  private static File file = new File("log");
+  private static String fs = System.getProperty("file.separator");
+
+  private static String OUTPUT_DIRECTORY = "log" + fs + getFileHeader() + "-L1ghts4j.log";
 
   public Logger() {
     if (!file.exists())
       file.mkdirs();
+  }
+
+  public static String getFileHeader() {
+    return sdf.format(new Date());
+  }
+  public String getHeader() {
+    return "[" + dtf.format(ZonedDateTime.now()) + "]";
   }
 
   /**
@@ -39,7 +43,7 @@ public class Logger {
   public void outputStartLog() {
     try {
       PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter((OUTPUT_DIRECTORY), true)));
-      pw.println(LOG_HEADER + "[INFO]  L1ghts4j has started.");
+      pw.println(getHeader() + "[INFO]  L1ghts4j has started.");
       pw.close();
     } catch (IOException e) {
       System.out.println("[ERROR] IOException has occurred in start log outputment.");
@@ -58,7 +62,7 @@ public class Logger {
     PrintWriter pw;
     try {
       pw = new PrintWriter(new BufferedWriter(new FileWriter((OUTPUT_DIRECTORY), true)));
-      pw.println(LOG_HEADER + "[INFO]  " + message);
+      pw.println(getHeader() + "[INFO]  " + message);
       pw.close();
     } catch (IOException e) {
       System.out.println("[ERROR] IOException has occurred in Log outputment.");
@@ -76,7 +80,7 @@ public class Logger {
   public void ouputErrorLog(String message) {
     try {
       PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter((OUTPUT_DIRECTORY), true)));
-      pw.println(LOG_HEADER + "[ERROR] " + message);
+      pw.println(getHeader() + "[ERROR] " + message);
       pw.close();
     } catch (Exception e) {
       System.out.println("[ERROR] IOException has occurred in Error log outputment.");
