@@ -45,14 +45,14 @@ public class UpdateName {
     if (settingReader.getUpdateNameAccessLevel() == 2) {
       this.updateNameExec(status, newName, screenName);
     } else if (settingReader.getUpdateNameAccessLevel() == 1) {
-      if ((twitter.getScreenName() == status.getUser().getScreenName())) {
+      if ((twitter.getScreenName() == screenName)) {
         this.updateNameExec(status, newName, screenName);
       } else {
-        tweet.ReplyTweet("Permission Dnied" + TIME_FOOTER, status);
+        tweet.ReplyTweet(String.format("@%s Permission Dnied" + TIME_FOOTER, screenName), status);
         logger.ouputErrorLog("Name has couldn't changed to " + newName + " (Permission denied)(by " + screenName + ")");
       }
     } else if (settingReader.getUpdateNameAccessLevel() == 0) {
-      tweet.ReplyTweet("update_namer is now tuned off." + TIME_FOOTER, status);
+      tweet.ReplyTweet(String.format("@%s update_namer is now tuned off." + TIME_FOOTER, screenName), status);
       logger.ouputErrorLog("Name has couldn't changed to " + newName + " (Tuned off)(by " + screenName + ")");
     }
 
@@ -66,13 +66,13 @@ public class UpdateName {
       System.out.println("Name has changed to \"" + newName + "\" by @" + screenName);
     } catch (TwitterException e) {
       if (newName.length() > 20) {
-        tweet.ReplyTweet("ユーザーネームは20文字以内で指定して下さい" + TIME_FOOTER, status);
+        tweet.ReplyTweet(String.format("@%s ユーザーネームは20文字以内で指定して下さい" + TIME_FOOTER, screenName), status);
         logger.ouputErrorLog("Name has couldn't changed " + newName + " (OutOfBoundsException)(by " + screenName + ")");
       } else if (newName.contains("Twitter")) {
-        tweet.ReplyTweet("\"Twitter\"を含む名前にはできません。" + TIME_FOOTER, status);
+        tweet.ReplyTweet(String.format("@%s \"Twitter\"を含む名前にはできません。" + TIME_FOOTER, screenName), status);
         logger.ouputErrorLog("Name has counldn't changed to " + newName + " (TwitterException)(by " + screenName + ")");
       } else {
-        tweet.ReplyTweet("不明なエラーが発生しました" + TIME_FOOTER, status);
+        tweet.ReplyTweet(String.format("@%s 不明なエラーが発生しました" + TIME_FOOTER, screenName), status);
         logger.ouputErrorLog("Name has couldn't changed to " + newName + " (Unknown error)(by " + screenName + ")");
       }
       e.printStackTrace();
