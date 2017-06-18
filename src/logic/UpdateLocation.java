@@ -19,7 +19,7 @@ public class UpdateLocation {
   private Tweet tweet;
   private Logger logger;
 
-  private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("(yyyy-MM-dd_HH:mm:ss.SSS)");
+  private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("(yyyy/MM/dd_HH:mm:ss.SSS)");
   private static String TIME_FOOTER;
 
   public UpdateLocation() {
@@ -28,7 +28,7 @@ public class UpdateLocation {
     logger = new Logger();
   }
 
-  public void updateLocationCall(Status status) throws IllegalStateException, TwitterException, IOException {
+  public void updateLocationCall(Status status) throws TwitterException, IOException {
     TIME_FOOTER = dtf.format(ZonedDateTime.now());
     System.out.println("update location called.");
     Pattern p = Pattern.compile(String.format("@%s update_location (.{1,31})", twitter.getScreenName()));
@@ -36,9 +36,6 @@ public class UpdateLocation {
 
     if (m.find()) {
       this.UpdateLocationAccess(status, m.group(1), status.getUser().getScreenName());
-      System.out.println("update location matched.");
-    } else {
-      System.out.println("update location not matched.");
     }
   }
 
@@ -47,10 +44,8 @@ public class UpdateLocation {
 
     if (settingReader.getUpdateNameAccessLevel() == 2) {
       this.updateLocationExec(status, newLocation, screenName);
-
     } else if (settingReader.getUpdateNameAccessLevel() == 1) {
-      
-      if ((twitter.getScreenName() == status.getUser().getScreenName())) {
+      if (screenName.equals(twitter.getScreenName())) {
         this.updateLocationExec(status, newLocation, screenName);
       } else {
         tweet.ReplyTweet("Permission Dnied" + TIME_FOOTER, status);

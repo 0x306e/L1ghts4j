@@ -14,12 +14,11 @@ import util.Logger;
 import util.SettingReader;
 
 public class UpdateName {
-
   private Twitter twitter;
   private Tweet tweet;
   private Logger logger;
 
-  private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("(yyyy-MM-dd_HH:mm:ss.SSS)");
+  private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("(yyyy/MM/dd_HH:mm:ss.SSS)");
   private static String TIME_FOOTER;
 
   public UpdateName() {
@@ -36,7 +35,6 @@ public class UpdateName {
     if (m.find()) {
       this.UpdateNameAccess(status, m.group(1), status.getUser().getScreenName());
     }
-
   }
 
   private void UpdateNameAccess(Status status, String newName, String screenName) throws TwitterException {
@@ -45,7 +43,7 @@ public class UpdateName {
     if (settingReader.getUpdateNameAccessLevel() == 2) {
       this.updateNameExec(status, newName, screenName);
     } else if (settingReader.getUpdateNameAccessLevel() == 1) {
-      if ((twitter.getScreenName() == screenName)) {
+      if (screenName.equals(twitter.getScreenName())) {
         this.updateNameExec(status, newName, screenName);
       } else {
         tweet.ReplyTweet(String.format("@%s Permission Dnied" + TIME_FOOTER, screenName), status);
