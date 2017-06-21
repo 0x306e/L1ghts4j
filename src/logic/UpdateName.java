@@ -13,13 +13,7 @@ import twitter4j.TwitterFactory;
 import util.Logger;
 import util.SettingReader;
 
-public class UpdateName {
-  private Twitter twitter;
-  private Tweet tweet;
-  private Logger logger;
-
-  private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("(yyyy/MM/dd_HH:mm:ss.SSS)");
-  private static String TIME_FOOTER;
+public class UpdateName extends Updater{
 
   public UpdateName() {
     twitter = TwitterFactory.getSingleton();

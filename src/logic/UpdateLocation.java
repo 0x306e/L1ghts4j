@@ -2,25 +2,16 @@ package logic;
 
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import twitter4j.Status;
-import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import util.Logger;
 import util.SettingReader;
-import logic.Tweet;
 
-public class UpdateLocation {
-  private Twitter twitter;
-  private Tweet tweet;
-  private Logger logger;
-
-  private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("(yyyy/MM/dd_HH:mm:ss.SSS)");
-  private static String TIME_FOOTER;
+public class UpdateLocation extends Updater{
 
   public UpdateLocation() {
     twitter = TwitterFactory.getSingleton();
