@@ -31,6 +31,7 @@ public class Loader {
    */
   public void UserStreamReceicever(Status status) throws TwitterException, IOException {
     un.updateNameCall(status);
+    un.getUpdateNameLevel(status);
     ul.updateLocationCall(status);
   }
 
