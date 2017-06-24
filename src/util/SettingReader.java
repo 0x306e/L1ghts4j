@@ -38,7 +38,7 @@ public class SettingReader {
    * UpdateNameのアクセスレベルを返すクラス
    * @return int 0~2
    */
-  public int getUpdateNameAccessLevel() {
+  public static int getUpdateNameAccessLevel() {
     return Integer.parseInt(Reader(L1GHTS4J_PROPS, UPDATE_NAME_ACCESS_LEVEL));
   }
   
@@ -46,7 +46,7 @@ public class SettingReader {
    * UpdateLocationのアクセスレベルを返すクラス
    * @return int 0~2
    */
-  public int getUpdateLocationAccessLevel() {
+  public static int getUpdateLocationAccessLevel() {
     return Integer.parseInt(Reader(L1GHTS4J_PROPS, UPDATE_LOCATION_ACCESS_LEVEL));
   }
   
@@ -54,7 +54,7 @@ public class SettingReader {
    * UpdateIconのアクセスレベルを返すクラス
    * @return int 0~2
    */
-  public int getUpdateIconAccessLevel() {
+  public static int getUpdateIconAccessLevel() {
     return Integer.parseInt(Reader(L1GHTS4J_PROPS, UPDATE_ICON_ACCESS_LEVEL));
   }
 
