@@ -1,15 +1,14 @@
 package logic;
 
+import static util.SettingReader.getUpdateNameAccessLevel;
+
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import twitter4j.Status;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import util.Logger;
-import util.SettingReader;
 
 public class UpdateLocation extends TwitterHeader{
 
@@ -21,21 +20,17 @@ public class UpdateLocation extends TwitterHeader{
 
   public void updateLocationCall(Status status) throws TwitterException, IOException {
     TIME_HEADER = dtf.format(ZonedDateTime.now());
-    System.out.println("update location called.");
-    Pattern p = Pattern.compile(String.format("@%s update_location (.{1,31})", twitter.getScreenName()));
-    Matcher m = p.matcher(status.getText());
-
-    if (m.find()) {
-      this.UpdateLocationAccess(status, m.group(1), status.getUser().getScreenName());
+    
+    if (!status.isRetweet() && (status.getText().contains(twitter.getScreenName()) && status.getText().contains("update_location"))) {
+      String newName = status.getText().substring(status.getText().lastIndexOf("update_location") + 15).trim();
+      this.UpdateLocationAccess(status, newName, status.getUser().getScreenName());
     }
   }
 
   private void UpdateLocationAccess(Status status, String newLocation, String screenName) throws TwitterException {
-    SettingReader settingReader = new SettingReader();
-
-    if (settingReader.getUpdateNameAccessLevel() == 2) {
+    if (getUpdateNameAccessLevel() == 2) {
       this.updateLocationExec(status, newLocation, screenName);
-    } else if (settingReader.getUpdateNameAccessLevel() == 1) {
+    } else if (getUpdateNameAccessLevel() == 1) {
       if (screenName.equals(twitter.getScreenName())) {
         this.updateLocationExec(status, newLocation, screenName);
       } else {
@@ -44,7 +39,7 @@ public class UpdateLocation extends TwitterHeader{
             "Loction has couldn't changed to " + newLocation + " (Permission denied)(by " + screenName + ")");
 
       }
-    } else if (settingReader.getUpdateNameAccessLevel() == 0) {
+    } else if (getUpdateNameAccessLevel() == 0) {
       tweet.ReplyTweet("update_locationer is now tuned off." + TIME_HEADER, status);
       logger.ouputErrorLog("Location has couldn't changed to " + newLocation + " (Tuned off)(by " + screenName + ")");
     }
