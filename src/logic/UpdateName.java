@@ -23,7 +23,6 @@ public class UpdateName extends TwitterHeader {
   public void updateNameCall(Status status) throws TwitterException, IOException {
     TIME_HEADER = dtf.format(ZonedDateTime.now());
 
-    
     if (!status.isRetweet() && (status.getText().contains(twitter.getScreenName()) && status.getText().contains("update_name"))) {
       String newName = status.getText().substring(status.getText().lastIndexOf("update_name") + 12).trim();
       this.UpdateNameAccess(status, newName, status.getUser().getScreenName());
