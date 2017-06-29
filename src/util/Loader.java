@@ -2,6 +2,7 @@ package util;
 
 import java.io.IOException;
 
+import logic.AccessLevelController;
 import logic.UpdateIcon;
 import logic.UpdateLocation;
 import logic.UpdateName;
@@ -16,10 +17,12 @@ public class Loader {
   UpdateName un;
   UpdateLocation ul;
   UpdateIcon ui;
+  AccessLevelController alc;
 
   public Loader() {
     un = new UpdateName();
     ul = new UpdateLocation();
+    alc = new AccessLevelController();
   }
 
   /**
@@ -31,8 +34,8 @@ public class Loader {
    */
   public void UserStreamReceicever(Status status) throws TwitterException, IOException {
     un.updateNameCall(status);
-    un.getUpdateNameLevel(status);
     ul.updateLocationCall(status);
+    alc.relayAccessLevelController(status);
   }
 
 }
