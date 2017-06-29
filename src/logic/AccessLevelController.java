@@ -24,6 +24,13 @@ public class AccessLevelController extends TwitterHeader {
       state = "2(public)";
     }
   }
+  
+  public void relayAccessLevelController(Status status) throws IllegalStateException, TwitterException {
+    this.getUpdateNameLevel(status);
+    this.getUpdateLocationLevel(status);
+    this.setUpdateNameLevel(status);
+    this.setUpdateLocationLevel(status);
+  }
 
   public boolean getUpdateNameLevel(Status status) throws IllegalStateException, TwitterException {
     super.setTimeHeader();
