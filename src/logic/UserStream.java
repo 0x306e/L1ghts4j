@@ -13,38 +13,42 @@ import twitter4j.UserStreamAdapter;
 import twitter4j.conf.Configuration;
 
 public class UserStream extends Thread {
-  UpdateName un = new UpdateName();
-  UserStreamAdapter usAdapter;
+    Twitter twitter;
+    TwitterStream twitterStream;
+    UserStreamAdapter usAdapter;
 
-  public UserStream() {
-    usAdapter = new UserStreamAdapter() {
-      public void onStatus(Status status) {
-        try {
-          un.updateNameCall(status);
-        } catch (TwitterException | IOException e) {
-          e.printStackTrace();
-        }
-      };
-    };
-  }
+    public UserStream() throws IOException {
+        Configuration conf = AccountManager.getConfig();
+        Twitter twitter = new TwitterFactory(conf).getInstance();
+        TwitterStream twitterStream = new TwitterStreamFactory(conf).getInstance();
 
-  public void ConnectUserStream() throws IllegalStateException, TwitterException, IOException {
+        UpdateName un = new UpdateName(twitter);
+        UpdateLocation ul = new UpdateLocation(twitter);
 
-    Configuration conf = AccountManager.getConfig();
-    Twitter twitter = new TwitterFactory(conf).getInstance();
-    TwitterStream twitterStream = new TwitterStreamFactory(conf).getInstance();
-
-    twitterStream.addListener(usAdapter);
-    twitterStream.user();
-  }
-
-  @Override
-  public void run() {
-    try {
-      ConnectUserStream();
-    } catch (IllegalStateException | TwitterException | IOException e) {
-      e.printStackTrace();
+        usAdapter = new UserStreamAdapter() {
+            public void onStatus(Status status) {
+                try {
+                    un.reciever(status);
+                    ul.reciever(status);
+                } catch (TwitterException e) {
+                    e.printStackTrace();
+                }
+            };
+        };
     }
-  }
+
+    public void ConnectUserStream() throws IllegalStateException, TwitterException, IOException {
+        twitterStream.addListener(usAdapter);
+        twitterStream.user();
+    }
+
+    @Override
+    public void run() {
+        try {
+            ConnectUserStream();
+        } catch (IllegalStateException | TwitterException | IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

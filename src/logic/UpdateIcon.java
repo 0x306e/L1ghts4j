@@ -1,5 +1,5 @@
 package logic;
 
 public class UpdateIcon {
-  // yotei ha mitei
+    // yotei ha mitei
 }
