@@ -4,25 +4,17 @@ import java.io.IOException;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
 
-/**
- * @author 0x306e アカウントの呼び出しを管理するクラス
- */
 public class AccountManager {
 
-    /**
-     * アクセストークン情報をセットするクラス
-     * 
-     * @return conf
-     * @throws IOException
-     */
-    public static Configuration getConfig() throws IOException {
+    public static Configuration getConfig(String id) throws IOException {
         ConfigurationBuilder builder = new ConfigurationBuilder();
+        SettingReader settingReader = new SettingReader(id);
 
-        builder.setDebugEnabled(SettingReader.getDebugValue());
-        builder.setOAuthConsumerKey(SettingReader.getConsumerKey());
-        builder.setOAuthConsumerSecret(SettingReader.getConsumerSecret());
-        builder.setOAuthAccessToken(SettingReader.getAccessToken());
-        builder.setOAuthAccessTokenSecret(SettingReader.getAccessTokenSecret());
+        builder.setDebugEnabled(settingReader.getDebugValue());
+        builder.setOAuthConsumerKey(settingReader.getConsumerKey());
+        builder.setOAuthConsumerSecret(settingReader.getConsumerSecret());
+        builder.setOAuthAccessToken(settingReader.getAccessToken());
+        builder.setOAuthAccessTokenSecret(settingReader.getAccessTokenSecret());
 
         Configuration conf = builder.build();
         return conf;

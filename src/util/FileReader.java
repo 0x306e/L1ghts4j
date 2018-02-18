@@ -5,17 +5,20 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
-public class PropertyReader {
+public abstract class FileReader {
 
-    private final static String L1GHTS4J_PROPS = "l1ghts4j.properties";
-    private Properties properties;
+	protected String path;
+    protected Properties properties;
     
-    public PropertyReader() {
+	protected FileReader() {}
+    
+    public FileReader(String file) {
+    	this.path = file;
     	properties = new Properties();
     }
     
     public void load() throws FileNotFoundException, IOException {
-    	properties.load(new FileInputStream(L1GHTS4J_PROPS));
+    	properties.load(new FileInputStream(path));
     }
 
     public String getValue(String key) {
