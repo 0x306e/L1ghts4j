@@ -105,3 +105,6 @@ local.properties
 .worksheet
 
 
+# User add
+.classpath
+..project
