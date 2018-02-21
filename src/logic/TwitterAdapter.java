@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter;
 import twitter4j.Twitter;
 import util.Logger;
 
-public class TwitterAdapter {
+public abstract class TwitterAdapter {
     protected Twitter twitter;
     protected Tweet tweet;
     protected Logger logger;

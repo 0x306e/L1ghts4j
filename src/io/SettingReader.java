@@ -1,20 +1,33 @@
-package account;
+package io;
 
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.Properties;
 
-import util.FileReader;
-
-public class SettingReader extends FileReader {
+public class SettingReader extends PropertyReader {
 
     protected final static String path = "twitter4j.properties";
     private String ID;
+    private Properties properties;
     
-    @SuppressWarnings("unused")
-	private SettingReader() {}
+	public SettingReader() {
+		ID = "default";
+		this.load();
+	}
     
     public SettingReader(String id) {
-    	super(path);
+    	super();
     	ID = id;
+    	this.load();
+    }
+    
+    @Override
+    public void load()  {
+    	try {
+			properties.load(new FileReader(path));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
     
     public boolean getDebugValue() throws IOException {

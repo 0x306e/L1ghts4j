@@ -1,7 +1,6 @@
 package util;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -10,59 +9,37 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
-/**
- * @author 3sodn ログ出力をするクラス
- */
 public class Logger {
 
     private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
     private static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss.SSS(xxxxx)");
-
-    private static File file = new File("log");
     private static String fs = System.getProperty("file.separator");
+    private static String OUTPUT_FILE;
 
-    private static String OUTPUT_DIRECTORY = "log" + fs + getFileHeader() + "-L1ghts4j.log";
-
-    public Logger() {
-        if (!file.exists())
-            file.mkdirs();
+    private Logger() {
+    }
+    
+    public static Logger getInstance() {
+    	return SingletonHolder.singleton;
+    }
+    
+    private static class SingletonHolder {
+    	private static Logger singleton = new Logger();
     }
 
-    public static String getFileHeader() {
-        return sdf.format(new Date());
+    public void setFilePath() {
+    	Logger.OUTPUT_FILE = "log" + fs + sdf.format(new Date()) + "-L1ghts4j.log";
     }
 
     public String getHeader() {
         return "[" + dtf.format(ZonedDateTime.now()) + "]";
     }
 
-    /**
-     * 開始時のログを出力するメソッド
-     * 
-     * @throws Exception
-     */
-    public void outputStartLog() {
-        try {
-            PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter((OUTPUT_DIRECTORY), true)));
-            pw.println(getHeader() + "[INFO]  L1ghts4j has started.");
-            pw.close();
-        } catch (IOException e) {
-            System.out.println("[ERROR] IOException has occurred in start log outputment.");
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 標準的なログを出力するメソッド
-     * 
-     * @param message
-     *            出力するログメッセージ
-     * @throws IOException
-     */
-    public void ouputLog(String message) {
+    public void output(String message) {
+    	this.setFilePath();
         PrintWriter pw;
         try {
-            pw = new PrintWriter(new BufferedWriter(new FileWriter((OUTPUT_DIRECTORY), true)));
+            pw = new PrintWriter(new BufferedWriter(new FileWriter((OUTPUT_FILE), true)));
             pw.println(getHeader() + "[INFO]  " + message);
             pw.close();
         } catch (IOException e) {
@@ -70,23 +47,13 @@ public class Logger {
             e.printStackTrace();
         }
     }
+    
+    public void outputStartLog() {
+    	this.output(getHeader() + "[INFO]  L1ghts4j has started.");
+    }
 
-    /**
-     * エラーログを出力するメソッド
-     * 
-     * @param message
-     *            出力するログメッセージ
-     * @throws IOException
-     */
     public void ouputErrorLog(String message) {
-        try {
-            PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter((OUTPUT_DIRECTORY), true)));
-            pw.println(getHeader() + "[ERROR] " + message);
-            pw.close();
-        } catch (Exception e) {
-            System.out.println("[ERROR] IOException has occurred in Error log outputment.");
-            e.printStackTrace();
-        }
+    	this.output(getHeader() + "[ERROR] " + message);
     }
 
 }

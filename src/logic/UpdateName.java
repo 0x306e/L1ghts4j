@@ -1,93 +1,96 @@
 package logic;
 
-import static util.SettingReader.*;
-
-import java.time.ZonedDateTime;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import io.PropertyReader;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import util.Logger;
 
-public class UpdateName extends Updater {
+public class UpdateName extends StatusListener {
+	String PREFIX = "update_name";
+	State state;
 
-    @SuppressWarnings("unused")
-    private UpdateName() {
-    }
+	private class State {
+		private Status status;
+		private String sender;
+		private String newName;
 
-    public UpdateName(Twitter t) {
-        twitter = t;
-        tweet = new Tweet(t);
-        logger = new Logger();
-    }
+		public State(Status s) {
+			status = s;
+			sender = status.getUser().getScreenName();
+			newName = status.getText().substring(status.getText().lastIndexOf(PREFIX) + PREFIX.length()).trim();
+		}
+	}
 
-    public void reciever(Status status) throws TwitterException {
-        TIME_HEADER = dtf.format(ZonedDateTime.now());
-        boolean rt = status.isRetweet();
-        boolean reply = status.getText().contains(twitter.getScreenName());
-        boolean call = status.getText().contains("update_name");
+	@SuppressWarnings("unused")
+	private UpdateName() {
+	}
 
-        if (!rt && reply && call) {
-            String newName = status.getText().substring(status.getText().lastIndexOf("update_name") + 12).trim();
-            this.accesser(status, newName, status.getUser().getScreenName());
-        }
-    }
+	public UpdateName(Twitter t) {
+		twitter = t;
+		tweet = new Tweet(t);
+		logger = Logger.getInstance();
+	}
 
-    private void accesser(Status status, String newName, String screenName) throws TwitterException {
-        int lvl = getUpdateNameAccessLevel();
-        if (lvl == 2) {
-            this.exec(status, newName);
-        } else if (lvl == 1) {
-            if (screenName.equals(twitter.getScreenName())) {
-                this.exec(status, newName);
-            } else {
-                tweet.ReplyTweet(String.format("@%s Permission Dnied" + TIME_HEADER, screenName), status);
-                logger.ouputErrorLog(
-                        "Name has couldn't changed to " + newName + " (Permission denied)(by " + screenName + ")");
-            }
-        } else if (lvl == 0) {
-            tweet.ReplyTweet(String.format("@%s update_namer is now tuned off." + TIME_HEADER, screenName), status);
-            logger.ouputErrorLog("Name has couldn't changed to " + newName + " (Tuned off)(by " + screenName + ")");
-        }
+	protected void exec(Status status) {
+		if (status.getText().contains("update_name")) {
+			state = new State(status);
+		}
+		try {
+			twitter.updateProfile(this.state.newName, null, null, null);
+			this.reportSuccess();
+		} catch (TwitterException e) {
+			this.reportFailed();
+			e.printStackTrace();
+		}
+	}
 
-    }
+	protected boolean getPermission() {
+		PropertyReader prop = new PropertyReader();
+		prop.load();
+		Boolean enabled = Boolean.getBoolean(prop.getValue("updateName.enabled"));
+		Boolean publicity = Boolean.getBoolean(prop.getValue("updateName.public"));
+		if (enabled && publicity) {
+			return true;
+		}
+		return false;
+	}
 
-    protected void exec(Status status, String newName) throws TwitterException {
-        String screenName = status.getUser().getScreenName();
-        try {
-            twitter.updateProfile(newName, null, null, null);
-            tweet.ReplyTweet("名前を\"" + newName + "\"に変更しました" + TIME_HEADER + "(by @" + screenName + ")", status);
-            logger.ouputLog("Name has changed to \"" + newName + "\" by @" + screenName);
-            System.out.println("Name has changed to \"" + newName + "\" by @" + screenName);
-        } catch (TwitterException e) {
-            if (newName.length() > 20) {
-                tweet.ReplyTweet(String.format("@%s ユーザーネームは20文字以内で指定して下さい" + TIME_HEADER, screenName), status);
-                logger.ouputErrorLog(
-                        "Name has couldn't changed " + newName + " (OutOfBoundsException)(by " + screenName + ")");
-            } else if (newName.contains("Twitter")) {
-                tweet.ReplyTweet(String.format("@%s \"Twitter\"を含む名前にはできません。" + TIME_HEADER, screenName), status);
-                logger.ouputErrorLog(
-                        "Name has counldn't changed to " + newName + " (TwitterException)(by " + screenName + ")");
-            } else {
-                tweet.ReplyTweet(String.format("@%s 不明なエラーが発生しました" + TIME_HEADER, screenName), status);
-                logger.ouputErrorLog(
-                        "Name has couldn't changed to " + newName + " (Unknown error)(by " + screenName + ")");
-            }
-            e.printStackTrace();
-        }
+	protected void reportSuccess() throws TwitterException {
+		try {
+			tweet.ReplyTweet(
+					"名前を\"" + this.state.newName + "\"に変更しました" + TIME_HEADER + "(by @" + this.state.sender + ")",
+					this.state.status);
+			logger.output("Name has changed to \"" + this.state.newName + "\" by @" + this.state.sender);
+			System.out.println("Name has changed to \"" + this.state.newName + "\" by @" + this.state.sender);
+		} catch (TwitterException e) {
+			e.printStackTrace();
+		}
 
-    }
+	}
 
-    public void getUpdateNameLevel(Status status) throws IllegalStateException, TwitterException {
-        Pattern p = Pattern.compile(String.format("@%s getLvl-update_name", twitter.getScreenName()));
-        Matcher m = p.matcher(status.getText());
+	private void reportFailed() {
+		try {
+			if (this.state.newName.length() > 20) {
+				tweet.ReplyTweet(String.format("@%s ユーザーネームは20文字以内で指定して下さい" + TIME_HEADER, this.state.sender),
+						this.state.status);
+				logger.ouputErrorLog("Name has couldn't changed " + this.state.newName + " (OutOfBoundsException)(by "
+						+ this.state.sender + ")");
+			} else if (this.state.newName.contains("Twitter")) {
+				tweet.ReplyTweet(String.format("@%s \"Twitter\"を含む名前にはできません。" + TIME_HEADER, this.state.sender),
+						this.state.status);
+				logger.ouputErrorLog("Name has counldn't changed to " + this.state.newName + " (TwitterException)(by "
+						+ this.state.sender + ")");
+			} else {
+				tweet.ReplyTweet(String.format("@%s 不明なエラーが発生しました" + TIME_HEADER, this.state.sender),
+						this.state.status);
+				logger.ouputErrorLog("Name has couldn't changed to " + this.state.newName + " (Unknown error)(by "
+						+ this.state.sender + ")");
+			}
+		} catch (TwitterException e) {
+			e.printStackTrace();
+		}
 
-        if (m.find()) {
-            tweet.ReplyTweet((String.format("@%s 現在のUpdateNameのアクセスレベルは" + getUpdateNameAccessLevel() + "です.",
-                    status.getUser().getScreenName())), status);
-        }
-    }
+	}
 
 }
