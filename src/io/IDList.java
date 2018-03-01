@@ -1,36 +1,30 @@
 package io;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
+
 
 public class IDList {
-	private ArrayList<String> IDs;
-	private static final String file = "IDList.conf";
+	private Path path = FileSystems.getDefault().getPath("IDList.conf");
+	private List<String> IDs;
 
 	public IDList() {
 		IDs = new ArrayList<String>();
 	}
+	
+	public void clear() {
+		this.IDs.clear();
+	}
 
 	public IDList load() {
-		IDs.clear();
+		this.clear();
 		try {
-			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-			String str = null;
-			do {
-				str = br.readLine();
-				if (str != null) {
-					IDs.add(str);
-				}
-			} while (str != null);
-			br.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			this.IDs = Files.readAllLines(path);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -42,7 +36,7 @@ public class IDList {
 			return;
 		}
 		try {
-			BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+			BufferedWriter bw = Files.newBufferedWriter(path);
 			IDs.forEach(s -> {
 				try {
 					bw.write(s + "\n");
@@ -57,7 +51,7 @@ public class IDList {
 		
 	}
 	
-	public ArrayList<String> getIDs() {
+	public List<String> getIDs() {
 		return this.IDs;
 	}
 }
