@@ -7,33 +7,38 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class PropertyWriter {
-    private final static String L1GHTS4J_PROPS = "l1ghts4j.properties";
+    private static String default_path = "l1ghts4j.properties";
+    private String path;
     private Properties properties;
 
     public PropertyWriter() {
-        properties = new Properties();
+        this(default_path);
+    }
 
+    public PropertyWriter(String path) {
+        properties = new Properties();
+        this.path = path;
         try {
-            properties.load(new FileInputStream(L1GHTS4J_PROPS));
+            properties.load(new FileInputStream(path));
         } catch (FileNotFoundException e) {
-            System.out.println("[ERROR] " + L1GHTS4J_PROPS + " does not found.");
+            System.out.println("[ERROR] " + path + " does not found.");
             e.printStackTrace();
         } catch (IOException e) {
             System.out.println("[ERROR] IOException has occurred.");
             e.printStackTrace();
         }
     }
-    
+
     public void load() throws FileNotFoundException, IOException {
-    	properties.load(new FileInputStream(L1GHTS4J_PROPS));
+        properties.load(new FileInputStream(path));
     }
-    
+
     public void setValue(String key, String value) {
-    	properties.setProperty(key, value);
+        properties.setProperty(key, value);
     }
-    
-    public void dump() throws IOException {
-    	properties.store(new FileWriter(L1GHTS4J_PROPS), "");
+
+    public void store() throws IOException {
+        properties.store(new FileWriter(path), "");
     }
 
 }
