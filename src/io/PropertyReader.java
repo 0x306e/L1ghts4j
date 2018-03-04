@@ -7,11 +7,12 @@ import java.util.Properties;
 
 public class PropertyReader {
 
-    protected String path = "l1ghts4j.properties";
+    public static final String default_path = "l1ghts4j.properties";
+    private String path;
     private Properties properties;
 
     public PropertyReader() {
-        properties = new Properties();
+        this(default_path);
     }
 
     public PropertyReader(String path) {

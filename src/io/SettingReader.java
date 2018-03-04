@@ -5,8 +5,8 @@ import java.io.IOException;
 
 public class SettingReader extends PropertyReader {
 
-    protected final static String default_path = "twitter4j.properties";
-    private final static String default_key = "default.";
+    public final static String default_path = "twitter4j.properties";
+    public final static String default_key = "default.";
     private String ID;
 
     public SettingReader() {
